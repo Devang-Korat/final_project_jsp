@@ -1,0 +1,253 @@
+<%@ page import="java.sql.*, javax.servlet.http.*, javax.servlet.*" %>
+<%
+    // --- Session Validation ---
+    HttpSession sess = request.getSession(false);
+    if (sess == null || sess.getAttribute("userid") == null) {
+        response.sendRedirect("../login.html");
+        return;
+    }
+
+    int adminId = Integer.parseInt(sess.getAttribute("userid").toString());
+    String adminName = "Admin";
+
+    // Handle form submission
+    String message = "";
+    if ("POST".equalsIgnoreCase(request.getMethod())) {
+        String title = request.getParameter("title");
+        String description = request.getParameter("description");
+        String postedBy = adminName;
+        String role = "admin";
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/smart_campus", "root", "");
+            PreparedStatement ps = con.prepareStatement(
+                "INSERT INTO notices (title, description, posted_by, role, date) VALUES (?, ?, ?, ?, NOW())"
+            );
+            ps.setString(1, title);
+            ps.setString(2, description);
+            ps.setString(3, postedBy);
+            ps.setString(4, role);
+            int i = ps.executeUpdate();
+
+            if (i > 0) {
+                message = "Notice added successfully!";
+            } else {
+                message = "Failed to add notice.";
+            }
+
+            ps.close();
+            con.close();
+        } catch (Exception e) {
+            message = "Error: " + e.getMessage();
+        }
+    }
+
+    // Fetch admin name
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/smart_campus", "root", "");
+        PreparedStatement ps = con.prepareStatement("SELECT name FROM admin WHERE admin_id=?");
+        ps.setInt(1, adminId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            adminName = rs.getString("name");
+        }
+        rs.close();
+        ps.close();
+        con.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Notice</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6fa;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: linear-gradient(180deg, #3b4fe4, #5563de);
+            color: #fff;
+            padding-top: 30px;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            margin: 5px 0;
+            gap: 10px;
+            transition: background 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+        }
+
+        .portal-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #4455EE;
+            padding: 10px;
+            border-radius: 6px;
+            color: white;
+            margin: 0 15px 20px 15px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 240px;
+            padding: 25px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .dashboard-header h2 {
+            font-weight: 600;
+            color: #2b2b2b;
+        }
+
+        .dashboard-header span {
+            font-weight: 600;
+            color: #3b4fe4;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            background: #fff;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            box-shadow: none;
+            border: 1px solid #ccc;
+        }
+
+        .btn-submit {
+            background-color: #198754;
+            color: white;
+            border-radius: 6px;
+        }
+
+        .btn-submit:hover {
+            background-color: #157347;
+            color: white;
+        }
+
+        .btn-back {
+            background-color: #6c757d;
+            color: white;
+            border-radius: 6px;
+        }
+
+        .btn-back:hover {
+            background-color: #5c636a;
+            color: white;
+        }
+
+        .bi, [data-lucide] {
+            color: black !important;
+            stroke: black !important;
+        }
+
+        .alert {
+            max-width: 700px;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="portal-title">
+            <i data-lucide="graduation-cap"></i>
+            <span style="font-weight: bold;">Admin Portal</span>
+        </div>
+
+        <a href="Admin_Dashboard.jsp"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></a>
+        <a href="Profile.jsp"><i data-lucide="user"></i><span>Profile</span></a>
+        <a href="Attandance.jsp"><i data-lucide="clipboard-list"></i><span>Student Attendance</span></a>
+        <a href="Students.jsp"><i data-lucide="user-round-cog"></i><span>Manage Student</span></a>
+        <a href="Faculty.jsp"><i data-lucide="users-round"></i><span>Manage Faculty</span></a>
+        <a href="timetable.jsp"><i data-lucide="calendar-days"></i><span>Timetable</span></a>
+        <a href="notice.jsp"><i data-lucide="bell"></i><span>Notice</span></a>
+        <a href="logout.jsp"><i data-lucide="log-out"></i><span>Logout</span></a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="dashboard-header">
+            <h2>Add Notice</h2>
+            <span>Welcome, <%= adminName %></span>
+        </div>
+
+        <% if (!message.isEmpty()) { %>
+            <div class="alert alert-info text-center"><%= message %></div>
+        <% } %>
+
+        <div class="card p-4 mt-4">
+            <form action="AddNotice.jsp" method="post">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Notice Title</label>
+                    <input type="text" id="title" name="title" class="form-control" placeholder="Enter notice title" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Notice Description</label>
+                    <textarea id="description" name="description" class="form-control" rows="5" placeholder="Enter notice description" required></textarea>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="notice.jsp" class="btn btn-back">
+                        <i class="bi bi-arrow-left-circle"></i> Back
+                    </a>
+                    <button type="submit" class="btn btn-submit">
+                        <i class="bi bi-check-circle"></i> Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
