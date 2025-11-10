@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Campus Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #74ABE2, #5563DE);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .login-container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      width: 400px;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 10px;
+      background: #5563DE;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #4452c8;
+    }
+    .footer-text {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    a {
+      color: #5563DE;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .error {
+      color: red;
+      font-size: 13px;
+      text-align: center;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Smart Campus Login</h2>
+    <form action="login.jsp" method="POST" onsubmit="return validateLogin()">
+      <label>Email:</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" />
+      <span id="emailError" class="error"></span>
+
+      <label>Password:</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" />
+      <span id="passwordError" class="error"></span>
+
+      <button type="submit">Login</button>
+    </form>
+
+    <div class="footer-text">
+      <p>Don’t have an account? <a href="student/register.html">Register as Student</a></p>
+    </div>
+  </div>
+
+  <script>
+    function validateLogin() {
+      let valid = true;
+      document.getElementById("emailError").textContent = "";
+      document.getElementById("passwordError").textContent = "";
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (email === "" || !email.includes("@")) {
+        document.getElementById("emailError").textContent = "Valid email required";
+        valid = false;
+      }
+
+      if (password.length < 6) {
+        document.getElementById("passwordError").textContent = "Password must be at least 6 characters";
+        valid = false;
+      }
+
+      return valid;
+    }
+  </script>
+</body>
+</html>

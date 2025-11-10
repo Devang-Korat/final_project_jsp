@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #74ABE2, #5563DE);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .register-container {
+      background: #fff;
+      padding: 25px 35px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 15px;
+      padding: 10px;
+      background: #5563DE;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #4452c8;
+    }
+
+    .error {
+      color: red;
+      font-size: 13px;
+    }
+
+    .footer-text {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .log {
+      color: #5563DE;
+      text-decoration: none;
+    }
+
+    .log:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="register-container">
+    <h2>Student Registration</h2>
+    <form action="register.jsp" method="POST" onsubmit="return validateForm()">
+
+      <label>Enrollment Number:</label>
+      <input type="text" id="enrollment" name="enrollment" placeholder="Enter Enrollment No">
+      <span id="enrollmentError" class="error"></span>
+
+      <label>Full Name:</label>
+      <input type="text" id="name" name="name" placeholder="Enter Full Name">
+      <span id="nameError" class="error"></span>
+
+      <label>Email:</label>
+      <input type="email" id="email" name="email" placeholder="Enter Email">
+      <span id="emailError" class="error"></span>
+
+      <label>Password:</label>
+      <input type="password" id="password" name="password" placeholder="Enter Password">
+      <span id="passwordError" class="error"></span>
+
+      <label>Course:</label>
+      <select id="course" name="course">
+        <option value="">Select Course</option>
+        <option value="Computer Science and Engineering">Computer Science and Engineering</option>
+        <option value="Computer Engineering">Computer Engineering</option>
+        <option value="Computer Science and Engineering (AI and MI)">Computer Science and Engineering (AI and MI)</option>
+        <option value="Computer Science and Engineering (AI and Data Science)">Computer Science and Engineering (AI and Data Science)</option>
+        <option value="Cyber Security">Cyber Security</option>
+      </select>
+      <span id="courseError" class="error"></span>
+
+      <label>Class:</label>
+      <select name="class1" id="class1">
+        <option value="">Select Class</option>
+        <option value="EV1">EV1</option>
+        <option value="EV2">EV2</option>
+        <option value="EV3">EV3</option>
+        <option value="EV4">EV4</option>
+        <option value="EV5">EV5</option>
+        <option value="EV7">EV7</option>
+      </select>
+      <span id="classError" class="error"></span>
+
+      <label>Semester:</label>
+      <select name="semester" id="semester">
+        <option value="">Select Semester</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+      </select>
+      <span id="semesterError" class="error"></span>
+
+      <label>Phone Number:</label>
+      <input type="text" id="phone" name="phone" placeholder="Enter Phone Number">
+      <span id="phoneError" class="error"></span>
+
+      <button type="submit">Register</button>
+
+      <div class="footer-text">
+        <p>If you have an account then <a class="log" href="../login.html">click on login</a></p>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function validateForm() {
+      let valid = true;
+      document.querySelectorAll(".error").forEach(e => e.textContent = "");
+
+      const enrollment = document.getElementById("enrollment").value.trim();
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const course = document.getElementById("course").value.trim();
+      const class1 = document.getElementById("class1").value.trim();
+      const semester = document.getElementById("semester").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+
+      if (enrollment === "") {
+        document.getElementById("enrollmentError").textContent = "Enrollment number is required";
+        valid = false;
+      }
+
+      if (name === "") {
+        document.getElementById("nameError").textContent = "Name is required";
+        valid = false;
+      }
+
+      if (email === "" || !email.includes("@")) {
+        document.getElementById("emailError").textContent = "Valid email is required";
+        valid = false;
+      }
+
+      if (password === "") {
+        document.getElementById("passwordError").textContent = "Password is required";
+        valid = false;
+      } else if (password.length < 6) {
+        document.getElementById("passwordError").textContent = "Password must be at least 6 characters";
+        valid = false;
+      }
+
+      if (course === "") {
+        document.getElementById("courseError").textContent = "Please select a course";
+        valid = false;
+      }
+
+      if (class1 === "") {
+        document.getElementById("classError").textContent = "Please select a class";
+        valid = false;
+      }
+
+      if (semester === "") {
+        document.getElementById("semesterError").textContent = "Please select a semester";
+        valid = false;
+      }
+
+      if (phone === "") {
+        document.getElementById("phoneError").textContent = "Phone number is required";
+        valid = false;
+      } else if (!/^[0-9]{10}$/.test(phone)) {
+        document.getElementById("phoneError").textContent = "Phone number must be 10 digits";
+        valid = false;
+      }
+
+      return valid;
+    }
+  </script>
+</body>
+</html>

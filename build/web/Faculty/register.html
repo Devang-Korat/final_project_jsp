@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faculty Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #74ABE2, #5563DE);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .register-container {
+      background: #fff;
+      padding: 25px 35px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      width: 400px;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      margin-top: 15px;
+      padding: 10px;
+      background: #5563DE;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #4452c8;
+    }
+    .error {
+      color: red;
+      font-size: 13px;
+    }
+    .footer-text {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    .log {
+      color: #5563DE;
+      text-decoration: none;
+    }
+    .log:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <h2>Faculty Registration</h2>
+    <form action="register.jsp" method="POST" onsubmit="return validateForm()">
+      <label>Name:</label>
+      <input type="text" id="name" name="name" placeholder="Enter Your Name">
+      <span id="nameError" class="error"></span>
+
+      <label>Email:</label>
+      <input type="email" id="email" name="email" placeholder="Enter Email">
+      <span id="emailError" class="error"></span>
+
+      <label>Password:</label>
+      <input type="password" id="password" name="password" placeholder="Enter Password">
+      <span id="passwordError" class="error"></span>
+
+      <label>Department:</label>
+      <select id="department" name="department">
+        <option value="">Select Department</option>
+        <option value="CE">CE</option>
+        <option value="CSE">CSE</option>
+        <option value="AI-ML">AI-ML</option>
+        <option value="CSE_AI">CSE-AI</option>
+      </select>
+      <span id="departmentError" class="error"></span>
+
+      <label>Phone Number:</label>
+      <input type="text" id="phone" name="phone" placeholder="Enter Phone Number">
+      <span id="phoneError" class="error"></span>
+
+      <button type="submit">Register</button>
+
+      <div class="footer-text">
+        <p>If you have an account then <a class="log" href="../login.html">click on login</a></p>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function validateForm() {
+      let valid = true;
+      document.querySelectorAll(".error").forEach(e => e.textContent = "");
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const department = document.getElementById("department").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+
+      if (name === "") {
+        document.getElementById("nameError").textContent = "Name is required";
+        valid = false;
+      }
+
+      if (email === "" || !email.includes("@")) {
+        document.getElementById("emailError").textContent = "Valid email is required";
+        valid = false;
+      }
+
+      if (password === "") {
+        document.getElementById("passwordError").textContent = "Password is required";
+        valid = false;
+      } else if (password.length < 6) {
+        document.getElementById("passwordError").textContent = "Password must be at least 6 characters";
+        valid = false;
+      }
+
+      if (department === "") {
+        document.getElementById("departmentError").textContent = "Please select a department";
+        valid = false;
+      }
+
+      if (phone === "") {
+        document.getElementById("phoneError").textContent = "Phone number is required";
+        valid = false;
+      } else if (!/^[0-9]{10}$/.test(phone)) {
+        document.getElementById("phoneError").textContent = "Phone number must be 10 digits";
+        valid = false;
+      }
+
+      return valid;
+    }
+  </script>
+</body>
+</html>
